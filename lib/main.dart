@@ -6,9 +6,8 @@ import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'models/transaction.dart';
 
-void main() {
-  runApp(const Gastos());
-}
+void main() => runApp(const Gastos());
+
 
 class Gastos extends StatelessWidget {
   const Gastos({super.key});
@@ -16,23 +15,21 @@ class Gastos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return MaterialApp(home: const HomePage(),
-    theme: ThemeData(
-      primarySwatch: Colors.teal,
-      fontFamily: 'Quicksand',
-      textTheme: const TextTheme(
-        bodyMedium: TextStyle(
-          fontWeight: FontWeight.bold,
-        )
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          textStyle: const TextStyle(
+    return MaterialApp(
+      home: const HomePage(),
+      theme: ThemeData(
+          primarySwatch: Colors.teal,
+          fontFamily: 'Quicksand',
+          textTheme: const TextTheme(
+              bodyMedium: TextStyle(
             fontWeight: FontWeight.bold,
-          )
-        )
-      )
-    ),);
+          )),
+          textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                  textStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+          )))),
+    );
   }
 }
 
@@ -43,28 +40,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
 class _HomePageState extends State<HomePage> {
-
-  final List<Transaction> _transaction = [
-    Transaction(
-        id: "id1", title: "Conta de agua", value: 154.2, data: DateTime.now()),
-    Transaction(
-        id: "id2", title: "Conta de luz", value: 354.2, data: DateTime.now()),
-    Transaction(
-        id: "id2", title: "Conta de luz", value: 354.2, data: DateTime.now()),
-    Transaction(
-        id: "id2", title: "Conta de luz", value: 354.2, data: DateTime.now()),
-    Transaction(
-        id: "id2", title: "Conta de luz", value: 354.2, data: DateTime.now()),
-    Transaction(
-        id: "id2", title: "Conta de luz", value: 354.2, data: DateTime.now()),
-    Transaction(
-        id: "id2", title: "Conta de luz", value: 354.2, data: DateTime.now()),
-    Transaction(
-        id: "id2", title: "Conta de luz", value: 354.2, data: DateTime.now()),
-  ];
-
+  final List<Transaction> _transaction = [];
 
   _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
@@ -79,47 +56,44 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
   }
 
-  _removeTransaction(String id){
+  _removeTransaction(String id) {
     setState(() {
       _transaction.removeWhere((element) => element.id == id);
     });
   }
 
-  _openTransactionForm(BuildContext context){
-    showModalBottomSheet(context: context, builder: (_){
-      return TransactionForm(_addTransaction);
-    });
+  _openTransactionForm(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return TransactionForm(_addTransaction);
+        });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Despezas pessoais", style: TextStyle(
-          fontFamily: 'OpenSans'
-        ),),
+        title: const Text(
+          "Despezas pessoais",
+          style: TextStyle(fontFamily: 'OpenSans'),
+        ),
         actions: [
-          IconButton(onPressed: () => _openTransactionForm(context)
-              , icon: const Icon(Icons.add))
+          IconButton(
+              onPressed: () => _openTransactionForm(context),
+              icon: const Icon(Icons.add))
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Container(
-            //   child: const Card(
-            //     color: Colors.blue,
-            //     child: Text("Grafico"),
-            //     elevation: 5,
-            //   ),
-            // ),
             Column(
               children: [
-                TransactionList(transactions: _transaction, onRemove: _removeTransaction),
+                TransactionList(
+                    transactions: _transaction, onRemove: _removeTransaction),
               ],
-            )
+            ),
           ],
         ),
       ),
