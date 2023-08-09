@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
-  final void Function (String) onRemove;
+  final void Function (int) onRemove;
   const TransactionList({super.key, required this.transactions, required this.onRemove});
 
   @override
@@ -35,6 +35,7 @@ class TransactionList extends StatelessWidget {
               itemCount: transactions.length,
               itemBuilder: (ctx, index) {
                 final e = transactions[index];
+                int? id = e.id;
                 return Card(
                   elevation: 5, 
                   margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
@@ -65,7 +66,7 @@ class TransactionList extends StatelessWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       color: Theme.of(context).colorScheme.error,
-                      onPressed: () => onRemove(e.id),
+                      onPressed: () => onRemove(id!),
                     ),
                     ),
                 );

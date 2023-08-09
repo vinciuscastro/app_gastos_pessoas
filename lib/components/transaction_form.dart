@@ -54,7 +54,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   const TextInputType.numberWithOptions(decimal: true),
               decoration: const InputDecoration(labelText: "Valor"),
             ),
-            Container(
+            SizedBox(
               height: 70,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

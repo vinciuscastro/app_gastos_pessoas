@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math';
-
 import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'models/transaction.dart';
+import 'models/db.dart';
 
 void main() => runApp(const Gastos());
 
@@ -16,6 +15,7 @@ class Gastos extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: const HomePage(),
       theme: ThemeData(
           primarySwatch: Colors.teal,
@@ -28,7 +28,7 @@ class Gastos extends StatelessWidget {
               style: TextButton.styleFrom(
                   textStyle: const TextStyle(
             fontWeight: FontWeight.bold,
-          )))),
+          ),),),),
     );
   }
 }
@@ -41,24 +41,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Transaction> _transaction = [];
+  List<Transaction> _transaction = [];
+
+  @override
+  void initState(){
+    super.initState();
+    _refresh();
+  }
+
+  _refresh() async{
+    List<Transaction> x = await DatabaseHelper.instance.selectRecords();
+    setState(() {
+      _transaction = x;
+    });
+  }
 
   _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
-        id: Random().nextDouble().toString(),
+        id: null,
         title: title,
         value: value,
         data: date);
     setState(() {
-      _transaction.add(newTransaction);
+      DatabaseHelper.instance.insertRecord(newTransaction);
+      _refresh();
     });
 
     Navigator.of(context).pop();
   }
 
-  _removeTransaction(String id) {
+  _removeTransaction(int id) {
     setState(() {
-      _transaction.removeWhere((element) => element.id == id);
+      DatabaseHelper.instance.deleteRecord(id);
+      _refresh();
     });
   }
 
